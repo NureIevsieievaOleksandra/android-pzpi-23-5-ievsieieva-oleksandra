@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                button.setText("Натиснуто");
+                button.setText(R.string.ButtonNewName);
             }
         });
 
