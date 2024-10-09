@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">android-pzpi-23-5-ievsieieva-oleksandra-pract-task2</string>
+    <string name="button1Name">Click me</string>
+    <string name="alertTitle">Button clicked</string>
+    <string name="alertMessage">Button \"clicke me\" was clicked</string>
+    <string name="newButtonName">Clicked</string>
+    <string name="gritting">Hello from grid</string>
+</resources>
