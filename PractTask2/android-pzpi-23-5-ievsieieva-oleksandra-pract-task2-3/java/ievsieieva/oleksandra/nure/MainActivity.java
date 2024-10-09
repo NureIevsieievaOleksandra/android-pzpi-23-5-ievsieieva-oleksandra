@@ -117,4 +117,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
 }
