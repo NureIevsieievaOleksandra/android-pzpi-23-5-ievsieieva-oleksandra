@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="ievsieieva.oleksandra.nure.data.model.Note.Type"/>
+        <variable
+            name="viewModel"
+            type="ievsieieva.oleksandra.nure.ui.note.edit.NoteEditViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/title"
+                android:text="@={viewModel.title}"
+                android:hint="@string/titleLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <EditText
+                android:id="@+id/desc"
+                android:hint="@string/descLabel"
+                android:text="@={viewModel.desc}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <RadioGroup
+                android:id="@+id/type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/desc"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+                <RadioButton
+                    android:id="@+id/low"
+                    android:text="@string/low"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={viewModel.low}"
+                    />
+                <RadioButton
+                    android:id="@+id/normal"
+                    android:text="@string/normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={viewModel.normal}"
+                    />
+                <RadioButton
+                    android:id="@+id/high"
+                    android:text="@string/high"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={viewModel.high}"
+                    />
+            </RadioGroup>
+
+            <DatePicker
+                android:id="@+id/date"
+                android:year="@={viewModel.year}"
+                android:month="@={viewModel.month}"
+                android:day="@={viewModel.day}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/type"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+<!--            android:onDateChanged="@{(_,y,m,d) -> viewModel.dateChanged(y,m,d)}"-->
+
+            <TimePicker
+                android:id="@+id/time"
+                android:hour="@={viewModel.hours}"
+                android:minute="@={viewModel.mins}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+<!--            android:onTimeChanged="@{(_,h,m) -> viewModel.timeChanged(h,m)}"-->
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time"
+                imageByRes="@{viewModel.image}"
+                />
+
+            <Button
+                android:id="@+id/selectImage"
+                android:text="@string/selectImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <Button
+                android:id="@+id/save"
+                android:onClick="@{_ -> viewModel.save()}"
+                android:text="@string/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/selectImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">android-pzpi-23-5-ievsieieva-oleksandra-lab-task1</string>
+    <string name="titleLabel">Назва</string>
+    <string name="descLabel">Опис</string>
+    <string name="dateLabel">Дата створення</string>
+    <string name="low">Низький</string>
+    <string name="normal">Нормальний</string>
+    <string name="high">Високий</string>
+    <string name="selectImage">Обрати картинку</string>
+    <string name="add">Додати</string>
+    <string name="search">Пошук</string>
+    <string name="filter">Фільтр</string>
+    <string name="delete">Видалити</string>
+    <string name="edit">Редагувати</string>
+    <string name="save">Зберегти</string>
+    <string name="fragmentList">Список нотаток</string>
+    <string name="fragmentEdit">Змінити / додати</string>
+    <string name="fragemntGallery">Галерея</string>
+    <string name="fragmentDetails">Деталі</string>
+</resources>

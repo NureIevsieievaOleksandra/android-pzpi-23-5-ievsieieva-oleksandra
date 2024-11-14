@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">android-pzpi-23-5-ievsieieva-oleksandra-lab-task1</string>
+    <string name="titleLabel">Title</string>
+    <string name="descLabel">Description</string>
+    <string name="dateLabel">Date created</string>
+    <string name="low">Low</string>
+    <string name="normal">Normal</string>
+    <string name="high">High</string>
+    <string name="selectImage">Select image</string>
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="fragmentList">Notes list</string>
+    <string name="fragmentEdit">Edit / add</string>
+    <string name="fragemntGallery">Gallery</string>
+    <string name="fragmentDetails">Note details</string>
+</resources>
