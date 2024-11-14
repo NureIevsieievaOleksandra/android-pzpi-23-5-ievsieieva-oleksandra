@@ -1,0 +1,22 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Androidpzpi235ievsieievaoleksandralabtask1" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.Androidpzpi235ievsieievaoleksandralabtask1" parent="Base.Theme.Androidpzpi235ievsieievaoleksandralabtask1">
+<!--        <item name="note_text_size">@dimen/regularText</item>-->
+<!--        <item name="note_text_color">@color/blue</item>-->
+<!--        <item name="note_text_style">italic</item>-->
+<!--        <item name="note_text_alignment">textStart</item>-->
+
+    </style>
+
+    <style name="Notes.Text" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/regularText</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+</resources>

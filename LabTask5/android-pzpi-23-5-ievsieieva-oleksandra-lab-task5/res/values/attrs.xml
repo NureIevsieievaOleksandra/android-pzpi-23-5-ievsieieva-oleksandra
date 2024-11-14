@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="note_text_size" format="dimension"/>
+    <attr name="note_text_color" format="color"/>
+    <attr name="note_text_style" format="reference"/>
+    <attr name="note_text_alignment" format="reference"/>
+
+</resources>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="ievsieieva.oleksandra.nure.ui.note.details.NoteDetailsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/margin"
+        android:paddingEnd="@dimen/margin"
+        >
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintGuide_percent="0.5"
+            android:orientation="vertical"
+            />
+
+        <ImageView
+            android:id="@+id/priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guide"
+            app:layout_constraintTop_toTopOf="parent"
+            priority="@{viewModel.note.type}"
+            />
+
+        <TextView
+            android:id="@+id/titleLabel"
+            style="@style/Notes.Text"
+            android:layout_width="0dp"
+            android:text="@string/titleLabel"
+            android:textSize="@dimen/textSmall"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guide"
+            app:layout_constraintTop_toBottomOf="@id/priority"
+            />
+        <TextView
+            android:id="@+id/title"
+            style="@style/Notes.Text"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/margin"
+            tools:text="title name"
+            android:textStyle="bold"
+            android:text="@{viewModel.note.title}"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guide"
+            app:layout_constraintTop_toBottomOf="@id/titleLabel"
+            />
+
+        <TextView
+            android:id="@+id/descLabel"
+            style="@style/Notes.Text"
+            android:layout_width="0dp"
+            android:text="@string/descLabel"
+            android:textSize="@dimen/textSmall"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guide"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            />
+        <TextView
+            android:id="@+id/desc"
+            style="@style/Notes.Text"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/margin"
+            tools:text="desc name"
+            android:textStyle="bold"
+            android:text="@{viewModel.note.desc}"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guide"
+            app:layout_constraintTop_toBottomOf="@id/descLabel"
+            />
+
+        <TextView
+            android:id="@+id/dateLabel"
+            style="@style/Notes.Text"
+            android:layout_width="0dp"
+            android:text="@string/dateLabel"
+            android:textSize="@dimen/textSmall"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/guide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/priority"
+            />
+        <TextView
+            android:id="@+id/date"
+            style="@style/Notes.Text"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/margin"
+            tools:text="date name"
+            android:textStyle="bold"
+            formatDate="@{viewModel.note.date}"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/guide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateLabel"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

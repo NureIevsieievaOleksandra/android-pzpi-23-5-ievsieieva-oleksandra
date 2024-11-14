@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="imageWidth">50dp</dimen>
+    <dimen name="imageHeight">50dp</dimen>
+    <dimen name="margin">8dp</dimen>
+    <dimen name="textSmall">12sp</dimen>
+    <dimen name="regularText">12sp</dimen>
+</resources>
