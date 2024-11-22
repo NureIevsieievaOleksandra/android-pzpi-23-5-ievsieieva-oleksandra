@@ -1,0 +1,428 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з практичної роботи № 3 з дисципліни
+Програмування під Android
+   
+
+
+
+
+
+Виконала:                                                                                     Перевірив:
+ст. гр. ПЗПІ-23-5                        				ст. викладач кафедри ПІ
+Євсєєва Олександра						Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+Харків 2024 
+ЗАВДАННЯ
+Ознайомитися із різними способами збереження даних у Android, зокрема з використанням SharedPreferences, бази даних SQLite та роботи з файлами. Навчитися застосовувати ці методи у прикладних проєктах.
+ 
+ХІД РОБОТИ
+Cтворюємо новий проєкт та обираємо Empty Views Activity.
+Робота з SharedPreferences: 
+SharedPreferences — це простий спосіб зберігати пари "ключ-значення", які зазвичай використовуються для збереження налаштувань застосунку або невеликих даних користувача. Файл налаштувань зберігається у вигляді XML у внутрішній пам'яті застосунку.
+Почнемо з того, що створимо об’єкт, який зберігається:
+1. public class User {
+2.  Integer id;
+3.    String name;
+4.    Integer age;
+5.}
+
+Отже, маємо користувача із іменем, віком та ID, за яким він пізніше буде використовуватися при роботі SQLite.
+Створимо інтерфейс для взаємодії із користувачем [ДОДАТОК А]. Використовуємо фрагмент із розміткою ConstraintLayout та вкладеним Recyclerview. Створюємо поля для запису нового користувача із ім’ям та віком, кнопки збереження та зчитування інформації. 
+SQLite база даних
+SQLite є вбудованою реляційною базою даних, яка дозволяє працювати з великими обсягами структурованих даних. SQLite не вимагає налаштування сервера, і дані зберігаються локально у файлі. - Для роботи з SQLite у Android зазвичай створюється клас, який успадковується від SQLiteOpenHelper.
+Отже, створємо клас SQLiteOpenHelper:
+1.public class DbHelper extends SQLiteOpenHelper {
+2.    private static final String SQL_CREATE_ENTRIES =
+3.            "CREATE TABLE IF NOT EXISTS  user (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)";
+4.    public static final int DATABASE_VERSION = 1;
+5.    public static final String DATABASE_NAME = "app.db";
+6.    public static final String TABLE_USER = "user";
+7.    public static final String ID = "id";
+8.    public static final String NAME = "name";
+9.    public static final String AGE = "age";
+
+10.    public DbHelper(@Nullable Context context) {
+11.        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+12.        this.getWritableDatabase().execSQL(SQL_CREATE_ENTRIES);}
+
+Після того, як Helper було створено, можна переходити до роботи із реляційною базою даних. Для цього зробимо окремий клас DataSource.java [ДОДАТОК Б].
+Реалізовуємо інтерфейс [ДОДАТОК В]. Клас MainFragment успадковується від Fragment. Він відповідає за створення та управління інтерфейсом користувача для цього фрагмента.
+Метод onCreateView створює вигляд для фрагмента, використовуючи Data Binding.
+У методі onViewCreated створюється об’єкт MainViewModel через ViewModelProvider, який забезпечує керування даними в архітектурі MVVM. Фрагмент підписується на зміни в об’єктах users, name і age.
+Метод writeToFile записує дані в текстовий файл config.txt, що зберігається в локальному сховищі додатка.
+Метод readFromFile читає дані з цього файлу та повертає їх у вигляді рядка.
+Клас MainViewModel успадковується від ViewModel і відповідає за управління даними та логікою, які використовуються в інтерфейсі фрагмента.
+Метод save():
+1.public void save() {
+2.    try {
+3.        dataSource.save(name.getValue(), Integer.parseInt(age.getValue()));
+4.    } catch (Exception exception) {
+5.        exception.printStackTrace();
+6.    }}
+
+Зберігає значення name і age у джерело даних (dataSource) через метод save. Значення age перед збереженням перетворюється з рядка на число через Integer.parseInt
+Метод onAdd():
+1.public void onAdd() {
+2.    try {
+3.        dataSource.insertUser(new User(null, name.getValue(), 4.Integer.parseInt(age.getValue())));
+5.        users.postValue(dataSource.getUsers());
+6.    } catch (Exception exception) {
+7.        exception.printStackTrace();
+8.    }}
+
+Створює нового користувача User із поточними значеннями name та age.
+Додає його до джерела даних через метод insertUser.
+Оновлює users у LiveData новим списком користувачів.
+Перехоплює можливі помилки в блоці try-catch.
+DataSource використовується для отримання, збереження та оновлення інформації про користувачів.
+Створення RecyclerView:
+onCreateViewHolder: Викликається для створення нових елементів ViewHolder
+1.public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+2.    ItemUserBinding binding = 3.DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), 4.R.layout.item_user, parent, false);
+5.    return new MainViewHolder( binding.getRoot(), binding);
+6.}
+
+onBindViewHolder: Встановлює дані в елементи списку:
+1.public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
+2.        holder.binding.setNameString(list.get(position).getName());
+3.        holder.binding.setAgeString(list.get(position).getAge().toString());
+4.    }
+
+У всьому адаптері використовується DataBindingUtil для спрощення роботи з інтерфейсом.
+ 
+ВИСНОВКИ
+
+Під час практичної роботи було: ознайомлено з основними способами збереження даних у Android: Використання SharedPreferences для збереження простих налаштувань користувача у вигляді пар ключ-значення. Застосування SQLite для зберігання великих структурованих даних у реляційній базі. Робота з файлами для запису та зчитування даних із локального сховища додатка.
+Відеозвіт на YouTube. URL: https://youtu.be/gMrIiVmxH-w 
+ 
+ВИКОРИСТАНІ ДЖЕРЕЛА
+
+1.	Документація AndroidDevelopers SharedPreferences. URL: https://developer.android.com/training/data-storage/shared-preferences (дата звернення: 15.11.2024)
+2.	Документація AndroidDevelopers Save data using SQLite. URL: https://developer.android.com/training/data-storage/sqlite (дата звернення: 15.11.2024)
+3.	Документація AndroidDevelopers SQLiteDatabase. URL: https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase (дата звернення: 15.11.2024)
+
+ 
+ДОДАТОК А
+
+fragment_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="ievsieieva.oleksandra.nure.ui.main.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <EditText
+            android:id="@+id/config"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/write"
+            />
+        
+        <Button
+            android:id="@+id/write"
+            android:text="Write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/read"
+            app:layout_constraintBottom_toBottomOf="@id/read"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/read"
+            />
+
+        <Button
+            android:id="@+id/read"
+            android:text="Read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/write"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <EditText
+            android:id="@+id/name"
+            android:text="@={viewModel.name}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/result"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <EditText
+            android:id="@+id/age"
+            android:text="@={viewModel.age}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <Button
+            android:id="@+id/add"
+            android:onClick="@{_ -> viewModel.onAdd()}"
+            android:text="Add to db"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/age"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            tools:listitem="@layout/item_user"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+ 
+ДОДАТОК Б
+
+DataSource.java
+package ievsieieva.oleksandra.nure.data;
+
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import ievsieieva.oleksandra.nure.data.db.DbHelper;
+import ievsieieva.oleksandra.nure.data.model.User;
+
+public class DataSource {
+    DbHelper dbHelper;
+    SQLiteDatabase db;
+    Context context;
+    private static DataSource INSTANCE = null;
+    SharedPreferences sharedPreferences;
+
+    private DataSource(Context context) {
+        this.context = context;
+        sharedPreferences = context.getSharedPreferences("app", Context.MODE_PRIVATE);
+        dbHelper = new DbHelper(context);
+        db = dbHelper.getWritableDatabase();
+    }
+
+    public void save(String name, Integer age) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("name",name);
+        editor.putInt("age", age);
+        editor.apply();
+    }
+
+    public String getName() {
+        return sharedPreferences.getString("name", "");
+    }
+
+    public Integer getAge() {
+        return sharedPreferences.getInt("age", 0);
+    }
+
+
+    public static DataSource getInstance(Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = new DataSource(context);
+        }
+        return INSTANCE;
+    }
+
+    public static DataSource getInstance() {
+        return INSTANCE;
+    }
+    
+    @SuppressLint("Range")
+    public List<User> getUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        Cursor cursor = db.query(
+                DbHelper.TABLE_USER,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        while (cursor.moveToNext()) {
+            users.add(
+                    new User(
+                            cursor.getInt(cursor.getColumnIndex(DbHelper.ID)),
+                            cursor.getString(cursor.getColumnIndex(DbHelper.NAME)),
+                            cursor.getInt(cursor.getColumnIndex(DbHelper.AGE))
+                    )
+            );
+        }
+        cursor.close();
+        return users;
+    }
+    
+    public void insertUser(User user) {
+        ContentValues values = new ContentValues();
+        values.put(DbHelper.NAME, user.getName());
+        values.put(DbHelper.AGE, user.getAge());
+
+        db.insert(DbHelper.TABLE_USER, null, values);
+    }
+}
+
+ 
+ДОДАТОК В
+
+MainFragment
+package ievsieieva.oleksandra.nure.ui.main;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+import ievsieieva.oleksandra.nure.R;
+import ievsieieva.oleksandra.nure.databinding.FragmentMainBinding;
+
+public class MainFragment extends Fragment {
+    MainAdapter adapter;
+    MainViewModel viewModel;
+    FragmentMainBinding binding;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        binding.setViewModel(viewModel);
+        adapter = new MainAdapter();
+        binding.list.setAdapter(adapter);
+
+        viewModel.users.observe(getViewLifecycleOwner(), list -> {
+            adapter.submitList(list);
+        });
+
+        viewModel.name.observe(getViewLifecycleOwner(), n -> {
+            viewModel.save();
+        });
+        viewModel.age.observe(getViewLifecycleOwner(), a -> {
+            viewModel.save();
+        });
+
+        binding.write.setOnClickListener(v -> {
+            writeToFile(binding.config.getText().toString(), getContext());
+            binding.config.setText("");
+        });
+
+        binding.read.setOnClickListener(v -> {
+            binding.result.setText(readFromFile(getContext()));
+        });
+    }
+
+    private void writeToFile(String data, Context context) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String readFromFile(Context context) {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("config.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+}
+
